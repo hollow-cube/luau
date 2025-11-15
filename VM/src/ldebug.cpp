@@ -113,7 +113,7 @@ static Closure* auxgetinfo(lua_State* L, const char* what, lua_Debug* ar, Closur
             if (f->isC)
             {
                 ar->source = "=[C]";
-                ar->what = "C";
+                ar->what = f->isC == 2 ? "J" : "C";
                 ar->linedefined = -1;
                 ar->short_src = "[C]";
             }

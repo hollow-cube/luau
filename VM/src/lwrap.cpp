@@ -112,8 +112,12 @@ LUA_API void luaW_pushlstring(lua_State* L, const char* s, size_t l) {
 LUA_API void luaW_pushcclosurek(lua_State* L, lua_CFunction fn, const char* debugname, int nup, lua_Continuation cont) {
     lua_jmpbuf jb;
     luaD_enter(L, &jb);
-    if (LUAU_SETJMP(jb.buf) == 0)
+    if (LUAU_SETJMP(jb.buf) == 0) {
         lua_pushcclosurek(L, fn, debugname, nup, cont);
+
+        // Marker for java function
+        (L->top - 1)->value.gc->cl.isC = 2;
+    }
     luaD_exit(L, &jb);
 }
 
