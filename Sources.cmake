@@ -347,6 +347,7 @@ target_sources(Luau.VM PRIVATE
     VM/include/lua.h
     VM/include/luaconf.h
     VM/include/lualib.h
+    VM/include/luawrap.h
 
     VM/src/lapi.cpp
     VM/src/laux.cpp
@@ -381,6 +382,7 @@ target_sources(Luau.VM PRIVATE
     VM/src/lvmexecute.cpp
     VM/src/lvmload.cpp
     VM/src/lvmutils.cpp
+    VM/src/lwrap.cpp
 
     VM/src/lapi.h
     VM/src/lbuffer.h
