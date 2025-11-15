@@ -52,3 +52,10 @@ void luau_set_compile_constant_string(lua_CompileConstant* constant, const char*
 {
     Luau::setCompileConstantString(constant, s, l);
 }
+
+// luau-java-begin: free within the same lib to resolve windows crash.
+void luau_ext_free(char *bytecode)
+{
+    free(bytecode);
+}
+// luau-java-end

@@ -76,3 +76,7 @@ LUACODE_API void luau_set_compile_constant_boolean(lua_CompileConstant* constant
 LUACODE_API void luau_set_compile_constant_number(lua_CompileConstant* constant, double n);
 LUACODE_API void luau_set_compile_constant_vector(lua_CompileConstant* constant, float x, float y, float z, float w);
 LUACODE_API void luau_set_compile_constant_string(lua_CompileConstant* constant, const char* s, size_t l);
+
+// luau-java-begin: free within the same lib to resolve windows crash.
+LUACODE_API void luau_ext_free(char *bytecode);
+// luau-java-end
