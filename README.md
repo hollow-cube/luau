@@ -1,3 +1,9 @@
+> [!IMPORTANT]  
+> This repository exists for usage in `luau-java`, you are not expected to use it directly.
+> 
+> Please report issues to [luau-java](https://github.com/hollow-cube/luau-java), 
+> not to the upstream repository.
+
 Luau ![CI](https://github.com/luau-lang/luau/actions/workflows/build.yml/badge.svg) [![codecov](https://codecov.io/gh/luau-lang/luau/branch/master/graph/badge.svg)](https://codecov.io/gh/luau-lang/luau)
 ====
 
