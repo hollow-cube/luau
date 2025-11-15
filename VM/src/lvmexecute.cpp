@@ -966,6 +966,11 @@ reentry:
                     lua_CFunction func = ccl->c.f;
                     int n = func(L);
 
+                    // luau-java-begin: propagate errors from java calls
+                    if (n < -100)
+                        luaD_throw(L, -(n + 100));
+                    // luau-java-end
+
                     // yield
                     if (n < 0)
                         goto exit;
@@ -3099,6 +3104,11 @@ int luau_precall(lua_State* L, StkId func, int nresults)
     {
         lua_CFunction func = ccl->c.f;
         int n = func(L);
+
+        // luau-java-begin: propagate errors from java calls
+        if (n < -100)
+            luaD_throw(L, -(n + 100));
+        // luau-java-end
 
         // yield
         if (n < 0)

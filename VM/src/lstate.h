@@ -202,6 +202,7 @@ typedef struct global_State
     int registryfree; // next free slot in registry
 
     struct lua_jmpbuf* errorjmp; // jump buffer data for longjmp-style error handling
+    uint8_t unwinding; // true if unwinding over java frames
 
     uint64_t rngstate; // PCG random number generator state
     uint64_t ptrenckey[4]; // pointer encoding key for display
