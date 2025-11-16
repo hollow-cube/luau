@@ -25,12 +25,12 @@ project(Luau LANGUAGES CXX C)
 add_library(Luau.Common STATIC)
 add_library(Luau.CLI.lib STATIC)
 add_library(Luau.Ast STATIC)
-add_library(Luau.Compiler STATIC)
+add_library(Luau.Compiler SHARED)
 add_library(Luau.Config STATIC)
 add_library(Luau.Analysis STATIC)
 add_library(Luau.EqSat STATIC)
-add_library(Luau.CodeGen STATIC)
-add_library(Luau.VM STATIC)
+add_library(Luau.CodeGen OBJECT)
+add_library(Luau.VM SHARED)
 add_library(Luau.Require STATIC)
 add_library(isocline STATIC)
 
@@ -97,11 +97,13 @@ target_link_libraries(Luau.EqSat PUBLIC Luau.Common)
 
 target_compile_features(Luau.CodeGen PRIVATE cxx_std_17)
 target_include_directories(Luau.CodeGen PUBLIC CodeGen/include)
-target_link_libraries(Luau.CodeGen PRIVATE Luau.VM Luau.VM.Internals) # Code generation needs VM internals
+target_include_directories(Luau.CodeGen PRIVATE VM/include)
+target_link_libraries(Luau.CodeGen PRIVATE Luau.VM.Internals) # Code generation needs VM internals
 target_link_libraries(Luau.CodeGen PUBLIC Luau.Common)
 
 target_compile_features(Luau.VM PRIVATE cxx_std_11)
 target_include_directories(Luau.VM PUBLIC VM/include)
+target_sources(Luau.VM PRIVATE $<TARGET_OBJECTS:Luau.CodeGen>)
 target_link_libraries(Luau.VM PUBLIC Luau.Common)
 
 target_compile_features(Luau.Require PUBLIC cxx_std_17)
@@ -171,6 +173,8 @@ if(LUAU_EXTERN_C)
     target_compile_definitions(Luau.VM PUBLIC LUA_API=extern\"C\")
     target_compile_definitions(Luau.Compiler PUBLIC LUACODE_API=extern\"C\")
     target_compile_definitions(Luau.CodeGen PUBLIC LUACODEGEN_API=extern\"C\")
+    # CodeGen needs LUA_API as well because we directly include lua.h now.
+    target_compile_definitions(Luau.CodeGen PUBLIC LUA_API=extern\"C\")
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION GREATER_EQUAL 1924)
