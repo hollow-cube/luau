@@ -1,4 +1,5 @@
 #include <csetjmp>
+#include <cstdio>
 
 #include "luawrap.h"
 #include "lualib.h"
@@ -36,6 +37,29 @@ inline void luaD_exit(lua_State* L, lua_jmpbuf* jb)
 LUA_API int luaW_getstatus(lua_State* L)
 {
     return L->global->unwinding;
+}
+
+LUA_API void luaW_assertconf_log() {
+    Luau::assertHandler() = [](const char* expression, const char* file, int line, const char* function) {
+        fprintf(stderr, "LUAU ASSERT FAILED: %s\n", expression);
+        fprintf(stderr, "  at %s:%d in %s\n", file, line, function);
+
+        return 0; // continue executing (probably will have corruption, but may give more info)
+    };
+}
+
+LUA_API void luaW_assertconf_dump() {
+    Luau::assertHandler() = [](const char* expression, const char* file, int line, const char* function) {
+        fprintf(stderr, "LUAU ASSERT FAILED: %s\n", expression);
+        fprintf(stderr, "  at %s:%d in %s\n", file, line, function);
+
+        // hard crash from here so the JVM will reconstruct the jvm side of the stacktrace.
+        // not sure if there is a better way to achieve this, but it works :-)
+        int *p = NULL;
+        *p = 42;
+
+        return 1;
+    };
 }
 
 LUA_API lua_State* luaW_newstate(lua_Alloc f)

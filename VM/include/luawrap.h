@@ -5,6 +5,9 @@
 
 LUA_API int luaW_getstatus(lua_State* L);
 
+LUA_API void luaW_assertconf_log();
+LUA_API void luaW_assertconf_dump();
+
 //
 // BEGIN LUA WRAPPERS
 //
