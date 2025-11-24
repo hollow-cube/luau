@@ -600,6 +600,12 @@ LUAU_NOINLINE void luaV_callTM(lua_State* L, int nparams, int res)
 
     lua_CFunction func = clvalue(fun)->c.f;
     int n = func(L);
+
+    // luau-java-begin: propagate errors from java calls
+    if (n < -100)
+        luaD_throw(L, -(n + 100));
+    // luau-java-end
+
     LUAU_ASSERT(n >= 0); // yields should have been blocked by nCcalls
 
     // ci is our callinfo, cip is our parent
